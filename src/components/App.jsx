@@ -1,32 +1,34 @@
 import { Component } from 'react';
-import  fetchMovies  from '../moviesApi';
+import fetchMovies from '../moviesApi';
 import Button from './Button/Button';
 import MoviesGallery from './MoviesGallery/MoviesGallary';
 import Modal from './Modal/Modal';
 
 export class App extends Component {
   state = {
-    isMoviesShow: false,
+    isMoviesShown: false,
     page: 1,
     movies: [],
     isLoading: false,
-    currentImege: null,
+    currentImage: null,
   };
   componentDidUpdate(_, prevState) {
-    const { isMovieShown, page } = this.state;
+    const { isMoviesShown, page } = this.state;
+    console.log(435);
     if (
-      (isMovieShown !== prevState.isMovieShown && isMovieShown) ||
-      (prevState.page !== page && isMovieShown)
+      (isMoviesShown !== prevState.isMoviesShown && isMoviesShown) ||
+      (prevState.page !== page && isMoviesShown)
     ) {
+      console.log(456);
       this.getMovies();
     }
-    if (!isMovieShown && isMovieShown !== prevState.isMovieShown) {
+    if (!isMoviesShown && isMoviesShown !== prevState.isMoviesShown) {
       this.setState({ movies: [], page: 1 });
     }
-  };
+  }
 
   showFilmsList = () => {
-    this.setState(({ isMoviesShow })=>({isMoviesShow: !isMoviesShow}));
+    this.setState(({ isMoviesShown }) => ({ isMoviesShown: !isMoviesShown }));
   };
 
   getMovies() {
@@ -44,27 +46,27 @@ export class App extends Component {
       .finally(() => {
         this.setState({ isLoading: false });
       });
-
+  }
   loadMore = () => {
-    this.setState ( prevState =>({page: prevState.page + 1})); 
+    this.setState(prevState => ({ page: prevState.page + 1 }));
   };
   openModal = data => {
-    this.setState({currentImege: data});
+    this.setState({ currentImage: data });
   };
-  closeModal = () =>{
-    this.setState({currentImege: null});
-  }
+  closeModal = () => {
+    this.setState({ currentImage: null });
+  };
   render() {
     const { showFilmsList, loadMore } = this;
-    const { isMovieShown, movies, currentImage } = this.state;
+    const { isMoviesShown, movies, currentImage } = this.state;
     return (
       <>
         <Button
           clickHandler={showFilmsList}
-          text={isMovieShown ? 'Hide movies list' : 'Show movies list'}
+          text={isMoviesShown ? 'Hide movies list' : 'Show movies list'}
         />
 
-        {isMovieShown && (
+        {isMoviesShown && (
           <>
             <MoviesGallery movies={movies} showModal={this.openModal} />
             <Button text="Load more" clickHandler={loadMore} />
@@ -76,3 +78,4 @@ export class App extends Component {
       </>
     );
   }
+}
